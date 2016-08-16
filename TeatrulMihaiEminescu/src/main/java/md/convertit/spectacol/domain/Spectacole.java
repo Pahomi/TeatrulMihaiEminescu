@@ -3,6 +3,10 @@ package md.convertit.spectacol.domain;
 import java.util.Date;
 
 public class Spectacole {
+	/*
+	 * This class represents a Course object
+	 * @author 
+	 */
 	private Long id;
 	private String name;
 	private int seatsAvailable;
