@@ -1,5 +1,7 @@
 package md.convertit.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -27,5 +29,12 @@ public void saveAllTest() throws Exception {
 	List<Spectacole> userSpectacole = DemoData.getDemoSpectacole(TOTAL_DEMO_SPECTACOLE);
 	assertNotNull(userSpectacole);
 	fs.saveAll(userSpectacole, PATH);
+}
+@Test
+public void readAllTest() throws Exception {
+	List<Spectacole> userSpectacole = fs.readAll(PATH);
+	assertNotNull(userSpectacole);
+	assertFalse(userSpectacole.isEmpty()); 
+	assertEquals(TOTAL_DEMO_SPECTACOLE, userSpectacole.size());
 }
 }

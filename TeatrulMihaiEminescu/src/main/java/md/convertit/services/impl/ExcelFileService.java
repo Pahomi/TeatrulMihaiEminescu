@@ -1,8 +1,11 @@
 package md.convertit.services.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,6 +14,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import md.convertit.spectacol.domain.Spectacole;
 import md.convertit.spectacol.services.FileService;
@@ -63,15 +68,57 @@ public class ExcelFileService implements FileService {
 
 	@Override
 	public List<Spectacole> readAll(String path) throws Exception {
-		 List<Spectacole> listSpectacole = new ArrayList<>();
+		List<Spectacole> listSpectacole = new ArrayList<>();
 
-		 
-		 
-		 
-		 return listSpectacole;
+		FileInputStream inputStream = new FileInputStream(new File(path));
+		Workbook workbook = new HSSFWorkbook(inputStream);
+		Sheet firstSheet = workbook.getSheetAt(0);
+		Iterator<Row> iterator = firstSheet.iterator();
+
+		while (iterator.hasNext()) {
+			Row nextRow = iterator.next();
+			Iterator<Cell> cellIterator = nextRow.cellIterator();
+			Spectacole spect = new Spectacole();
+
+			while (cellIterator.hasNext()) {
+				Cell nextCell = cellIterator.next();
+				int columnIndex = nextCell.getColumnIndex();
+
+				switch (columnIndex) {
+				case 1:
+					spect.setName((String) getCellValue(nextCell));
+					break;
+				case 2:
+					spect.setSeatsAvailable((int) getCellValue(nextCell));
+					break;
+				case 3:
+	               spect.setPremiere((boolean) getCellValue(nextCell));
+	                break;
+				case 4:
+	                spect.setData((Date) getCellValue(nextCell));
+	                break;
+	            
+				}
+			
+				
+			}
+
+		}
+		return listSpectacole;
+}
+
+	private Object getCellValue(Cell cell) {
+		switch (cell.getCellType()) {
+		case Cell.CELL_TYPE_STRING:
+			return cell.getStringCellValue();
+
+		case Cell.CELL_TYPE_BOOLEAN:
+			return cell.getBooleanCellValue();
+
+		case Cell.CELL_TYPE_NUMERIC:
+			return cell.getNumericCellValue();
+		}
+
+		return null;
 	}
-
-	
-
-
 }
