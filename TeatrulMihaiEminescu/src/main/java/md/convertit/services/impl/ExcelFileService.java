@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -40,8 +41,8 @@ public class ExcelFileService implements FileService {
 		cell = row.createCell(3);
 		cell.setCellValue("Date");
 
-		for (int i = 1; i < spectacole.size(); i++) {
-			row = sheet.createRow(i);
+		for (int i = 0; i < spectacole.size(); i++) {
+			row = sheet.createRow(i+1);
 			cell = row.createCell(0);
 			cell.setCellValue(spectacole.get(i).getName());
 			cell = row.createCell(1);
@@ -77,35 +78,40 @@ public class ExcelFileService implements FileService {
 
 		while (iterator.hasNext()) {
 			Row nextRow = iterator.next();
-			Iterator<Cell> cellIterator = nextRow.cellIterator();
-			Spectacole spect = new Spectacole();
+			if (nextRow.getRowNum() != 0) {
+				Iterator<Cell> cellIterator = nextRow.cellIterator();
+				Spectacole spect = new Spectacole();
 
-			while (cellIterator.hasNext()) {
-				Cell nextCell = cellIterator.next();
-				int columnIndex = nextCell.getColumnIndex();
+				while (cellIterator.hasNext()) {
+					Cell nextCell = cellIterator.next();
+					int columnIndex = nextCell.getColumnIndex();
 
-				switch (columnIndex) {
-				case 1:
-					spect.setName((String) getCellValue(nextCell));
-					break;
-				case 2:
-					spect.setSeatsAvailable((int) getCellValue(nextCell));
-					break;
-				case 3:
-	               spect.setPremiere((boolean) getCellValue(nextCell));
-	                break;
-				case 4:
-	                spect.setData((Date) getCellValue(nextCell));
-	                break;
-	            
+					switch (columnIndex) {
+					 case 0:
+					 spect.setName((String) getCellValue(nextCell));
+					 break;
+					 case 1:
+						 Double d = new Double((double) getCellValue(nextCell));
+						 int i = d.intValue();
+					 spect.setSeatsAvailable(i);
+					 break;
+					 case 2:
+					 spect.setPremiere((boolean) getCellValue(nextCell));
+					 break;
+					case 3:
+						System.out.println(getCellValue(nextCell));
+						spect.setData(new Date(Math.round((double) getCellValue(nextCell))));
+						break;
+
+					}
 				}
-			
-				
+				listSpectacole.add(spect);
 			}
-
 		}
+
+		inputStream.close();
 		return listSpectacole;
-}
+	}
 
 	private Object getCellValue(Cell cell) {
 		switch (cell.getCellType()) {

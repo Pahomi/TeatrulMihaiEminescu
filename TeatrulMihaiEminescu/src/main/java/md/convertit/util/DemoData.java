@@ -21,7 +21,7 @@ public class DemoData {
 			spectacole.setName("Iubire la prosti!" + random.nextInt(45));
 			spectacole.setData(RandomData.getrandomDate());
 			spectacole.setPremiere(random.nextBoolean());
-			spectacole.setSeatsAvailable(random.nextInt());
+			spectacole.setSeatsAvailable(random.nextInt(250));
 			list.add(spectacole);
 		}
 		return list;
