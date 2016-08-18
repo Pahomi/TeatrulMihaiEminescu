@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -99,7 +98,6 @@ public class ExcelFileService implements FileService {
 					 spect.setPremiere((boolean) getCellValue(nextCell));
 					 break;
 					case 3:
-						System.out.println(getCellValue(nextCell));
 						spect.setData(new Date(Math.round((double) getCellValue(nextCell))));
 						break;
 
