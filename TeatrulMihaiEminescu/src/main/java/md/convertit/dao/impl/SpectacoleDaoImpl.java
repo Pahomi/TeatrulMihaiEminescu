@@ -28,7 +28,7 @@ public class SpectacoleDaoImpl implements SpectacoleDao{
 			ps.setString(1, spectacole.getName());
 			ps.setInt(2, spectacole.getSeatsAvailable());
 			ps.setBoolean(3,spectacole.isPremiere());
-			ps.setDate(4, (Date) spectacole.getData());
+			//ps.setDate(4, (Date) spectacole.getData()); TODO to test
 			
 			
 		} catch (SQLException e) {
