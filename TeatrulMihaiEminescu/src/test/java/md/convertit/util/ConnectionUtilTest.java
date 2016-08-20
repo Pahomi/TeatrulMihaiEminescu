@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import md.convertit.util.ConnectionUtil;
+
 
 public class ConnectionUtilTest {
 	@Test
