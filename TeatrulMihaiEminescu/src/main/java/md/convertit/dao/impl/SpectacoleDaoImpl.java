@@ -80,20 +80,20 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 	public boolean update(Spectacole newSpectacole, Long id) {
 		try {
 			conn = ConnectionUtil.getConnection();
-			String sql = "UPDATE `spectacole` SET `name`='?', `seatsAvailable`='?', `premiere`='?', `data`='?' WHERE `id`='?'";
+			String sql = "UPDATE `spectacole` SET `name`=?, `seatsAvailable`=?, `premiere`=?, `data`=? WHERE `id`=?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, newSpectacole.getName());
 			ps.setInt(2, newSpectacole.getSeatsAvailable());
 			ps.setBoolean(3, newSpectacole.isPremiere());
 			ps.setDate(4, new Date(newSpectacole.getData().getTime()));
-			ps.setLong(4, id);
+			ps.setLong(5, id);
 			int affectedRows = ps.executeUpdate();
 			log.info(String.format("Update object, total affected rows: %d", affectedRows));
 			return true;
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			log.severe(String.format("Exception: %s", e.getMessage()));
 			e.printStackTrace();
 		}
 		return false;
@@ -101,7 +101,18 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 
 	@Override
 	public boolean delete(Long id) {
-		// TODO Auto-generated method stub
+		try {
+			conn = ConnectionUtil.getConnection();
+			String sql = "DELETE FROM `spectacole` WHERE `id`=? ;";
+			ps = conn.prepareStatement(sql);
+			ps.setLong(1, id);
+			ps.executeUpdate();
+			log.info(String.format("Object with id : %d was deleted", id));
+			return true;
+		} catch (SQLException e) {
+			log.severe(String.format("Exception: %s", e.getMessage()));
+			e.printStackTrace();
+		}
 		return false;
 	}
 }

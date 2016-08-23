@@ -1,5 +1,6 @@
 package md.convertit.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -17,10 +18,6 @@ public class SpectacoleDaoImplTest {
 	public void testSave(){
 		List<Spectacole> data = DemoData.getDemoSpectacole(1);
 		Spectacole spectacole = data.get(0);
-//		spectacole.setName("Gogoasa");
-//		spectacole.setSeatsAvailable(85);
-//		spectacole.setPremiere(true);
-//		spectacole.setData(new Date());
 		dao.save(spectacole);
 	}
 	@Test
@@ -32,17 +29,21 @@ public class SpectacoleDaoImplTest {
 	}
 	@Test
 	public void testUpdate(){
-		final Long USER_ID = 1L;
+		final Long Spectacole_ID = 1L;
 		Spectacole newSpectacole = new Spectacole();
-		newSpectacole.setName("");
-		//newSpectacole.setSeatsAvailable();
-//		User newUser = new User();
-//		newUser.setUsername("new_admin");
-//		newUser.setEmail("new_amin@mail.com");
-//		newUser.setPassword("new_password");
-//		boolean result = dao.update(newUser, USER_ID);
-//		//verificam result sa fie true
-		//Assert.assertTrue(result);
+		newSpectacole.setName("Ultima noapte la Madrid");
+		newSpectacole.setSeatsAvailable(89);
+		newSpectacole.setId(Spectacole_ID);
+		newSpectacole.setPremiere(true);
+		newSpectacole.setData(new Date());
+		boolean result = dao.update(newSpectacole, Spectacole_ID);
+		Assert.assertTrue(result);
+	}
+	@Test
+	public void testDelete(){
+		final Long Spectacole_ID = 3L;
+		boolean result = dao.delete(Spectacole_ID);
+		Assert.assertTrue(result);
 	}
 	
 }
