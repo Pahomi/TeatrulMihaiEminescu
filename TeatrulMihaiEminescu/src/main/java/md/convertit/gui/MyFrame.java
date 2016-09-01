@@ -5,21 +5,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
@@ -33,10 +30,9 @@ public class MyFrame extends JFrame {
 	private JButton deleteButton;
 	private JButton exportButton;
 	private JTextField numeTextField;
-	private JTextField numeTextField1;
-	private JRadioButton premiereYes;
-	private JRadioButton premiereNo;
-	private JSpinner seatsAvailable;
+	private JTextField dateTextField;
+	private JCheckBox premiereCheckBox;
+	private SeatsPanel seatsPanel;
 
 	public MyFrame() throws HeadlessException {
 		super();
@@ -52,7 +48,14 @@ public class MyFrame extends JFrame {
 	}
 
 	private void addActionListeners() {
-		// TODO Auto-generated method stub
+//		saveButton.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 
 	}
 
@@ -85,49 +88,40 @@ public class MyFrame extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		premiereYes = new JRadioButton("Yes");
-		premiereYes.setSelected(true);
-        premiereNo = new JRadioButton("No");
-        
-        ButtonGroup premiereButtonGroup = new ButtonGroup();
-        premiereButtonGroup.add(premiereYes);
-        premiereButtonGroup.add(premiereNo);
-        
-        panel.add(new JLabel("Premiere"));
-        panel.add(premiereNo);
-        panel.add(premiereYes);
-        
+		// nume
 		JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		numeTextField = new JTextField(30);
 		panel1.setBorder(new TitledBorder(new EtchedBorder(), "Nume"));
-		
-		seatsAvailable= new JSpinner();
-        //facem model pt spiner
-     SpinnerModel spinnerModel = new SpinnerNumberModel(18, 18, 109, 1);
-     
-     seatsAvailable.setModel(spinnerModel);
-     seatsAvailable.setMinimumSize(new Dimension(Integer.MAX_VALUE, 
-    		 seatsAvailable.getPreferredSize().height));
-		
 
+		// data
 		JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		numeTextField1 = new JTextField(30);
-		panel2.setBorder(new TitledBorder(new EtchedBorder(), "Nume2"));
-
-		// JPanel panel3 = new JPanel(new GridLayout());
-		// int height = numeTextField.getPreferredSize().height;
-		// int width = Integer.MAX_VALUE;
-		// numeTextField.setMaximumSize(new Dimension(width,height));
-		// numeTextField.setMinimumSize(new Dimension(Integer.MAX_VALUE,
-		// numeTextField.getPreferredSize().height));
-
+		dateTextField = new JTextField(30);
+		panel2.setBorder(new TitledBorder(new EtchedBorder(), "Data"));
+		// premiere
+		JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panel3.setBorder(new TitledBorder(new EtchedBorder(), "Premiere"));
+		premiereCheckBox = new JCheckBox("Premiere");
+		
+		JPanel panel4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panel4.setBorder(new TitledBorder(new EtchedBorder()));
+		
+	
+		//seats
+		seatsPanel = new SeatsPanel(8, 6);
+		
+		
 		panel1.add(numeTextField);
-		panel2.add(numeTextField1);
+		panel2.add(dateTextField);
+		panel3.add(premiereCheckBox);
 
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Adauga spectacol"));
 		panel.add(panel1);
 		panel.add(panel2);
-		panel.add(Box.createRigidArea(new Dimension(0, 500)));
+		panel.add(panel3);
+		panel.add(seatsPanel);
+		
+		
+		
 
 		JScrollPane scrollPane = new JScrollPane(panel);
 		return scrollPane;
