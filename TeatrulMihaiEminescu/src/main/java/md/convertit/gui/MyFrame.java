@@ -8,14 +8,15 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -33,6 +34,8 @@ public class MyFrame extends JFrame {
 	private JTextField dateTextField;
 	private JCheckBox premiereCheckBox;
 	private SeatsPanel seatsPanel;
+	private JPanel rightPanel;
+	private JTable table;
 
 	public MyFrame() throws HeadlessException {
 		super();
@@ -48,14 +51,14 @@ public class MyFrame extends JFrame {
 	}
 
 	private void addActionListeners() {
-//		saveButton.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
+		saveButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String nume = numeTextField.getText();
+
+			}
+		});
 
 	}
 
@@ -67,10 +70,16 @@ public class MyFrame extends JFrame {
 		leftPanel.setBackground(Color.GREEN);
 		leftPanel.setMinimumSize(new Dimension(400, 700));
 
-		JPanel rightPanel = new JPanel(new BorderLayout());
+		rightPanel = new JPanel(new BorderLayout());
 		rightPanel.setBackground(Color.RED);
 
 		JScrollPane formScrollPane = createFormPanel();
+
+		JPanel formButtonsPanel = createFormButtonsPanel();
+
+		JScrollPane tableScrollPane = createTableScrollPane();
+
+		JPanel tableButtonsPanel = createButtonsPanel();
 
 		// ***********************************************
 		setContentPane(mainSplitPane);
@@ -81,6 +90,56 @@ public class MyFrame extends JFrame {
 
 		leftPanel.add(formScrollPane, BorderLayout.CENTER);
 
+		leftPanel.add(formButtonsPanel, BorderLayout.SOUTH);
+
+		rightPanel.add(tableScrollPane, BorderLayout.CENTER);
+
+		rightPanel.add(tableButtonsPanel, BorderLayout.SOUTH);
+
+	}
+
+	private JScrollPane createTableScrollPane() {
+
+		// Create SqlUserTableModel
+		SqlUserTableModel tableModel = new SqlUserTableModel();
+
+		// Init table
+		table = new JTable(tableModel);
+
+		// set selection mode to single
+		table.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+
+		// JScrollPane init
+		JScrollPane jScrollPane = new JScrollPane(table);
+
+		return jScrollPane;
+	}
+
+	private JPanel createButtonsPanel() {
+		JPanel rightButtonPanel = new JPanel();
+		editButton = new JButton("Edit");
+		deleteButton = new JButton("Delete");
+		exportButton = new JButton("Export");
+
+		rightButtonPanel.add(editButton);
+		rightButtonPanel.add(deleteButton);
+		rightButtonPanel.add(exportButton);
+
+		return rightButtonPanel;
+	}
+
+	private JPanel createFormButtonsPanel() {
+		JPanel leftButtonPanel = new JPanel();
+
+		// init buton
+		saveButton = new JButton("Save");
+		clearButton = new JButton("Clear");
+
+		// adaug buton pe panel
+		leftButtonPanel.add(saveButton);
+		leftButtonPanel.add(clearButton);
+
+		return leftButtonPanel;
 	}
 
 	private JScrollPane createFormPanel() {
@@ -101,15 +160,13 @@ public class MyFrame extends JFrame {
 		JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panel3.setBorder(new TitledBorder(new EtchedBorder(), "Premiere"));
 		premiereCheckBox = new JCheckBox("Premiere");
-		
+
 		JPanel panel4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panel4.setBorder(new TitledBorder(new EtchedBorder()));
-		
-	
-		//seats
+
+		// seats
 		seatsPanel = new SeatsPanel(8, 6);
-		
-		
+
 		panel1.add(numeTextField);
 		panel2.add(dateTextField);
 		panel3.add(premiereCheckBox);
@@ -119,9 +176,6 @@ public class MyFrame extends JFrame {
 		panel.add(panel2);
 		panel.add(panel3);
 		panel.add(seatsPanel);
-		
-		
-		
 
 		JScrollPane scrollPane = new JScrollPane(panel);
 		return scrollPane;

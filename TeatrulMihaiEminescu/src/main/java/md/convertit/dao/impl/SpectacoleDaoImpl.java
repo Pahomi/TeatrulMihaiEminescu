@@ -52,9 +52,11 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 			ps = conn.prepareStatement(sql);
 			ResultSet set = ps.executeQuery();
 			while (set.next()) {
-				long id = set.getInt("id");
 
 				Spectacole spectacole = new Spectacole();
+				long id = set.getInt("id");
+				spectacole.setId(id);
+
 				String name = set.getString("name");
 				spectacole.setName(name);
 				int seatsAvailable = set.getInt("seatsAvailable");
@@ -90,8 +92,7 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 			int affectedRows = ps.executeUpdate();
 			log.info(String.format("Update object, total affected rows: %d", affectedRows));
 			return true;
-			
-			
+
 		} catch (SQLException e) {
 			log.severe(String.format("Exception: %s", e.getMessage()));
 			e.printStackTrace();
