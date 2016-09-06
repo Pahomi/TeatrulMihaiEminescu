@@ -93,4 +93,11 @@ public class SeatsPanel extends JPanel {
 		
 	}
 
+	public void reset() {
+		for (JButton jButton : locuri) {
+			jButton.setBackground(Color.GREEN);
+		}
+		
+	}
+
 }

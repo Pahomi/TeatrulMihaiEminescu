@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import md.convertit.dao.SpectacoleDao;
 import md.convertit.dao.impl.SpectacoleDaoImpl;
 import md.convertit.spectacol.domain.Spectacole;
 
@@ -12,13 +13,13 @@ public class SqlUserTableModel extends AbstractTableModel{
 	private static final long serialVersionUID = -2627265411566825310L;
 
 	SpectacoleDaoImpl spectDao = new SpectacoleDaoImpl();
-	private List<Spectacole> spectacole = new ArrayList<>();
+	private List<Spectacole> spectacoleList = new ArrayList<>();
 	// store column names
 	private String[] columnNames = {"Id", "Name", "SeatsAvailable", "Premiere", "Data"};
 
 	public SqlUserTableModel() {
 		super();
-		spectacole = spectDao.findAll();
+		spectacoleList = spectDao.findAll();
 	}
 	
 	@Override
@@ -28,12 +29,12 @@ public class SqlUserTableModel extends AbstractTableModel{
 
 	@Override
 	public int getRowCount() {
-		return spectacole.size();
+		return spectacoleList.size();
 	}
 
 	@Override
 	public Object getValueAt(int row, int column) {
-	Spectacole spectacol = spectacole.get(row);
+	Spectacole spectacol = spectacoleList.get(row);
 	if(column == 0){
 		return spectacol.getId();
 	} else if(column == 1){
@@ -50,5 +51,16 @@ public class SqlUserTableModel extends AbstractTableModel{
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
-		
+	public void addSpectacole(Spectacole spectacol){
+		spectDao.save(spectacol);
+		spectacoleList = spectDao.findAll();
+		fireTableDataChanged();
+	}	
+	public void removeSpectacole(int row){
+		spectDao.delete((long) row);
+		spectacoleList = spectDao.findAll();
+		fireTableDataChanged();
+	}
+	
+	
 }

@@ -116,4 +116,6 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 		}
 		return false;
 	}
+
+	
 }

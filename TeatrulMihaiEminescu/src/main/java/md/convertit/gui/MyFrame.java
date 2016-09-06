@@ -7,12 +7,19 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -20,6 +27,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import md.convertit.spectacol.domain.Spectacole;
 
 public class MyFrame extends JFrame {
 
@@ -47,18 +56,113 @@ public class MyFrame extends JFrame {
 		iniContainers();
 
 		addActionListeners();
-
 	}
 
 	private void addActionListeners() {
+		numeTextField.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				super.focusGained(e);
+				numeTextField.setBorder(new JTextField().getBorder());
+
+			}
+
+		});
+		dateTextField.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				super.focusGained(e);
+				dateTextField.setBorder(new JTextField().getBorder());
+			}
+
+		});
+
 		saveButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nume = numeTextField.getText();
+				if (validateFields()) {
+					String name = numeTextField.getText();
+
+					boolean premiere = premiereCheckBox.isSelected();
+
+					int seatsAvailable = seatsPanel.getLocuriLibere();
+
+					Spectacole spect = new Spectacole();
+					spect.setName(name);
+					spect.setSeatsAvailable(seatsAvailable);
+					spect.setPremiere(premiere);
+
+					DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+					String dateAsString = dateTextField.getText();
+					Date date = null;
+					try {
+						date = sourceFormat.parse(dateAsString);
+						spect.setData(date);
+
+						SqlUserTableModel model = (SqlUserTableModel) table.getModel();
+						model.addSpectacole(spect);
+						clearFields();
+					} catch (ParseException e1) {
+						dateTextField.setBorder(new EtchedBorder(Color.RED, Color.GRAY));
+					}
+				}
+
+			}
+
+			private boolean validateFields() {
+				boolean validated = true;
+				if (numeTextField.getText().trim().isEmpty()) {
+					numeTextField.setBorder(new EtchedBorder(Color.RED, Color.BLUE));
+					validated = false;
+				}
+				if (dateTextField.getText().trim().isEmpty()) {
+					dateTextField.setBorder(new EtchedBorder(Color.RED, Color.BLUE));
+					validated = false;
+				}
+				return validated;
+			}
+		});
+
+		clearButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearFields();
 
 			}
 		});
+		deleteButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SqlUserTableModel model = (SqlUserTableModel) table.getModel();
+				model.removeSpectacole(table.getSelectedRow());
+				JOptionPane.showMessageDialog(MyFrame.this,"Spectacolul a fost sters!!!");
+				
+			}
+		});
+		editButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+	}
+
+	/**
+	 * clear all  complited fields
+	 */
+	protected void clearFields() {
+		numeTextField.setText("");
+		dateTextField.setText("");
+		premiereCheckBox.setSelected(false);
+		seatsPanel.reset();
 
 	}
 
@@ -155,6 +259,8 @@ public class MyFrame extends JFrame {
 		// data
 		JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		dateTextField = new JTextField(30);
+		dateTextField.setToolTipText("dd/mm/yyyy");
+		dateTextField.setText("14/04/2016");
 		panel2.setBorder(new TitledBorder(new EtchedBorder(), "Data"));
 		// premiere
 		JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
