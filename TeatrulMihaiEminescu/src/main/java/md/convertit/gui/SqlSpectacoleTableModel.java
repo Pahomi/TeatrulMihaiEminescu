@@ -61,6 +61,35 @@ public class SqlSpectacoleTableModel extends AbstractTableModel{
 		spectacoleList = spectDao.findAll();
 		fireTableDataChanged();
 	}
+
+	public SpectacoleDaoImpl getSpectDao() {
+		return spectDao;
+	}
+
+	public void setSpectDao(SpectacoleDaoImpl spectDao) {
+		this.spectDao = spectDao;
+	}
+
+	public List<Spectacole> getSpectacoleList() {
+		return spectacoleList;
+	}
+
+	public void setSpectacoleList(List<Spectacole> spectacoleList) {
+		this.spectacoleList = spectacoleList;
+	}
+
+	public String[] getColumnNames() {
+		return columnNames;
+	}
+
+	public void setColumnNames(String[] columnNames) {
+		this.columnNames = columnNames;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
 	
 	
 }

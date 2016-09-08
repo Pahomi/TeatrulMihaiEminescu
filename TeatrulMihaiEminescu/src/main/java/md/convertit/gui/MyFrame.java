@@ -28,7 +28,12 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import md.convertit.services.impl.ExcelFileService;
+import md.convertit.services.impl.JsonFileService;
+import md.convertit.services.impl.XmlFileService;
 import md.convertit.spectacol.domain.Spectacole;
+import md.convertit.spectacol.services.FileService;
+import md.convertit.util.FileUtil;
 
 public class MyFrame extends JFrame {
 
@@ -38,7 +43,9 @@ public class MyFrame extends JFrame {
 	private JButton clearButton;
 	private JButton editButton;
 	private JButton deleteButton;
-	private JButton exportButton;
+	private JButton exportJsonButton;
+	private JButton exportXmlButton;
+	private JButton exportExcell;
 	private JTextField numeTextField;
 	private JTextField dateTextField;
 	private JCheckBox premiereCheckBox;
@@ -148,16 +155,97 @@ public class MyFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				String name = numeTextField.getText();;
+
+				boolean premiere = premiereCheckBox.isSelected();
+
+				int seatsAvailable = seatsPanel.getLocuriLibere();
 				
+				Spectacole spect = new Spectacole();
+				spect.getName();
+				spect.getSeatsAvailable();
+				spect.isPremiere();
+				
+				DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+				String dateAsString = dateTextField.getText();
+				Date date = null;
+				try {
+					date = sourceFormat.parse(dateAsString);
+					spect.setData(date);
+
+					SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
+					model.addSpectacole(spect);
+					clearFields();
+				} catch (ParseException e1) {
+					dateTextField.setBorder(new EtchedBorder(Color.RED, Color.GRAY));
+				}
 			}
+
+				
+				
+		
 		});
-		exportButton.addActionListener(new ActionListener() {
+		exportJsonButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				SqlSpectacoleTableModel tableModel =(SqlSpectacoleTableModel) table.getModel();
+			
+			FileService fs = new JsonFileService();
+			try {
+				String path = FileUtil.showSaveFileDialog();
+				if (path == null) return;
+				fs.saveAll(tableModel.getSpectacoleList(), path.concat(".json"));
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(MyFrame.this, 
+						"Error on export to JSON", "Export to JSON", 
+						JOptionPane.ERROR_MESSAGE);
+				e1.printStackTrace();
+			}
+		
+			}
+		});
+		exportXmlButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SqlSpectacoleTableModel tableModel =(SqlSpectacoleTableModel) table.getModel();
+				FileService fs = new XmlFileService();
 				
+				try {
+					String path = FileUtil.showSaveFileDialog();
+					if (path == null) return;
+					fs.saveAll(tableModel.getSpectacoleList(), path.concat(".xml"));
+					JOptionPane.showMessageDialog(MyFrame.this, 
+							"Users was successfully exported", "Export to XML", 
+							JOptionPane.INFORMATION_MESSAGE);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(MyFrame.this, 
+							"Error on export to XML", "Export to XML", 
+							JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
+				}
+				
+				
+			}
+		});
+		exportExcell.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SqlSpectacoleTableModel tableModel =(SqlSpectacoleTableModel) table.getModel();
+				FileService fs = new ExcelFileService();
+
+				try {
+					String path = FileUtil.showSaveFileDialog();
+					if (path == null) return;
+					fs.saveAll(tableModel.getSpectacoleList(), path.concat(".xls"));
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(MyFrame.this, 
+							"Error on export to EXCELL", "Export to EXCELL", 
+							JOptionPane.ERROR_MESSAGE);
+					e1.printStackTrace();
+				}
 			}
 		});
 	}
@@ -230,11 +318,16 @@ public class MyFrame extends JFrame {
 		JPanel rightButtonPanel = new JPanel();
 		editButton = new JButton("Edit");
 		deleteButton = new JButton("Delete");
-		exportButton = new JButton("Export");
+		exportJsonButton = new JButton("Export to JSON");
+		exportXmlButton = new JButton("Export to XML");
+		exportExcell = new JButton("Export to Excell");
+		
 
 		rightButtonPanel.add(editButton);
 		rightButtonPanel.add(deleteButton);
-		rightButtonPanel.add(exportButton);
+		rightButtonPanel.add(exportJsonButton);
+		rightButtonPanel.add(exportXmlButton);
+		rightButtonPanel.add(exportExcell);
 
 		return rightButtonPanel;
 	}
