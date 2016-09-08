@@ -102,7 +102,7 @@ public class MyFrame extends JFrame {
 						date = sourceFormat.parse(dateAsString);
 						spect.setData(date);
 
-						SqlUserTableModel model = (SqlUserTableModel) table.getModel();
+						SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
 						model.addSpectacole(spect);
 						clearFields();
 					} catch (ParseException e1) {
@@ -138,7 +138,7 @@ public class MyFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SqlUserTableModel model = (SqlUserTableModel) table.getModel();
+				SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
 				model.removeSpectacole(table.getSelectedRow());
 				JOptionPane.showMessageDialog(MyFrame.this,"Spectacolul a fost sters!!!");
 				
@@ -152,7 +152,14 @@ public class MyFrame extends JFrame {
 				
 			}
 		});
-		
+		exportButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	/**
@@ -205,7 +212,7 @@ public class MyFrame extends JFrame {
 	private JScrollPane createTableScrollPane() {
 
 		// Create SqlUserTableModel
-		SqlUserTableModel tableModel = new SqlUserTableModel();
+		SqlSpectacoleTableModel tableModel = new SqlSpectacoleTableModel();
 
 		// Init table
 		table = new JTable(tableModel);

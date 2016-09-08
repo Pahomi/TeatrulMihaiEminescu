@@ -9,7 +9,7 @@ import md.convertit.dao.SpectacoleDao;
 import md.convertit.dao.impl.SpectacoleDaoImpl;
 import md.convertit.spectacol.domain.Spectacole;
 
-public class SqlUserTableModel extends AbstractTableModel{
+public class SqlSpectacoleTableModel extends AbstractTableModel{
 	private static final long serialVersionUID = -2627265411566825310L;
 
 	SpectacoleDaoImpl spectDao = new SpectacoleDaoImpl();
@@ -17,7 +17,7 @@ public class SqlUserTableModel extends AbstractTableModel{
 	// store column names
 	private String[] columnNames = {"Id", "Name", "SeatsAvailable", "Premiere", "Data"};
 
-	public SqlUserTableModel() {
+	public SqlSpectacoleTableModel() {
 		super();
 		spectacoleList = spectDao.findAll();
 	}
