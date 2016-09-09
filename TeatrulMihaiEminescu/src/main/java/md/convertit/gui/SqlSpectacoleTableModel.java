@@ -1,11 +1,11 @@
 package md.convertit.gui;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import md.convertit.dao.SpectacoleDao;
 import md.convertit.dao.impl.SpectacoleDaoImpl;
 import md.convertit.spectacol.domain.Spectacole;
 
@@ -89,6 +89,7 @@ public class SqlSpectacoleTableModel extends AbstractTableModel{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 	
 	
 	

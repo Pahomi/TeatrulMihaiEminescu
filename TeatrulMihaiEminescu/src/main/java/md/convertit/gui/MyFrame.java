@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.DateFormat;
@@ -142,17 +143,17 @@ public class MyFrame extends JFrame {
 			}
 		});
 		deleteButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
 				model.removeSpectacole(table.getSelectedRow());
-				JOptionPane.showMessageDialog(MyFrame.this,"Spectacolul a fost sters!!!");
-				
+				JOptionPane.showMessageDialog(MyFrame.this, "Spectacolul a fost sters!!!");
+
 			}
 		});
 		editButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -160,75 +161,70 @@ public class MyFrame extends JFrame {
 				spect.getName();
 				spect.getSeatsAvailable();
 				spect.isPremiere();
-				
-				DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-				String dateAsString = dateTextField.getText();
-				Date date = null;
-				dateTextField.getText().trim().isEmpty();
+
+				SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
+				//Spectacole spectacole = model.getData().getName().getSeatsAvailable().isPremiere()
+						//.get(table.getSelectedRow());
+
 			}
 
-				
-				
-		
 		});
 		exportJsonButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SqlSpectacoleTableModel tableModel =(SqlSpectacoleTableModel) table.getModel();
-			
-			FileService fs = new JsonFileService();
-			try {
-				String path = FileUtil.showSaveFileDialog();
-				if (path == null) return;
-				fs.saveAll(tableModel.getSpectacoleList(), path.concat(".json"));
-			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(MyFrame.this, 
-						"Error on export to JSON", "Export to JSON", 
-						JOptionPane.ERROR_MESSAGE);
-				e1.printStackTrace();
-			}
-		
+				SqlSpectacoleTableModel tableModel = (SqlSpectacoleTableModel) table.getModel();
+
+				FileService fs = new JsonFileService();
+				try {
+					String path = FileUtil.showSaveFileDialog();
+					if (path == null)
+						return;
+					fs.saveAll(tableModel.getSpectacoleList(), path.concat(".json"));
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(MyFrame.this, "Error on export to JSON", "Export to JSON",
+							JOptionPane.ERROR_MESSAGE);
+					e1.printStackTrace();
+				}
+
 			}
 		});
 		exportXmlButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				SqlSpectacoleTableModel tableModel =(SqlSpectacoleTableModel) table.getModel();
+				SqlSpectacoleTableModel tableModel = (SqlSpectacoleTableModel) table.getModel();
 				FileService fs = new XmlFileService();
-				
+
 				try {
 					String path = FileUtil.showSaveFileDialog();
-					if (path == null) return;
+					if (path == null)
+						return;
 					fs.saveAll(tableModel.getSpectacoleList(), path.concat(".xml"));
-					JOptionPane.showMessageDialog(MyFrame.this, 
-							"Users was successfully exported", "Export to XML", 
+					JOptionPane.showMessageDialog(MyFrame.this, "Users was successfully exported", "Export to XML",
 							JOptionPane.INFORMATION_MESSAGE);
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(MyFrame.this, 
-							"Error on export to XML", "Export to XML", 
+					JOptionPane.showMessageDialog(MyFrame.this, "Error on export to XML", "Export to XML",
 							JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
-				
-				
+
 			}
 		});
 		exportExcell.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SqlSpectacoleTableModel tableModel =(SqlSpectacoleTableModel) table.getModel();
+				SqlSpectacoleTableModel tableModel = (SqlSpectacoleTableModel) table.getModel();
 				FileService fs = new ExcelFileService();
 
 				try {
 					String path = FileUtil.showSaveFileDialog();
-					if (path == null) return;
+					if (path == null)
+						return;
 					fs.saveAll(tableModel.getSpectacoleList(), path.concat(".xls"));
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(MyFrame.this, 
-							"Error on export to EXCELL", "Export to EXCELL", 
+					JOptionPane.showMessageDialog(MyFrame.this, "Error on export to EXCELL", "Export to EXCELL",
 							JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
@@ -237,7 +233,7 @@ public class MyFrame extends JFrame {
 	}
 
 	/**
-	 * clear all  complited fields
+	 * clear all complited fields
 	 */
 	protected void clearFields() {
 		numeTextField.setText("");
@@ -307,7 +303,6 @@ public class MyFrame extends JFrame {
 		exportJsonButton = new JButton("Export to JSON");
 		exportXmlButton = new JButton("Export to XML");
 		exportExcell = new JButton("Export to Excell");
-		
 
 		rightButtonPanel.add(editButton);
 		rightButtonPanel.add(deleteButton);
