@@ -155,12 +155,7 @@ public class MyFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String name = numeTextField.getText();;
 
-				boolean premiere = premiereCheckBox.isSelected();
-
-				int seatsAvailable = seatsPanel.getLocuriLibere();
-				
 				Spectacole spect = new Spectacole();
 				spect.getName();
 				spect.getSeatsAvailable();
@@ -169,16 +164,7 @@ public class MyFrame extends JFrame {
 				DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
 				String dateAsString = dateTextField.getText();
 				Date date = null;
-				try {
-					date = sourceFormat.parse(dateAsString);
-					spect.setData(date);
-
-					SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
-					model.addSpectacole(spect);
-					clearFields();
-				} catch (ParseException e1) {
-					dateTextField.setBorder(new EtchedBorder(Color.RED, Color.GRAY));
-				}
+				dateTextField.getText().trim().isEmpty();
 			}
 
 				
