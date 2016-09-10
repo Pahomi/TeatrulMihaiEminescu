@@ -7,7 +7,7 @@ public class Spectacole {
 	 * This class represents a Course object
 	 * @author 
 	 */
-	private Long id;
+	private long id;
 	private String name;
 	private int seatsAvailable;
 	private boolean premiere;
@@ -22,10 +22,10 @@ public class Spectacole {
 		this.premiere = premiere;
 		this.data = data;
 	}
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {

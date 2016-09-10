@@ -31,12 +31,13 @@ public class SpectacoleDaoImplTest {
 	public void testUpdate(){
 		final Long Spectacole_ID = 1L;
 		Spectacole newSpectacole = new Spectacole();
+		newSpectacole.setId(Spectacole_ID);
 		newSpectacole.setName("Ultima noapte la Madrid");
 		newSpectacole.setSeatsAvailable(89);
 		newSpectacole.setId(Spectacole_ID);
 		newSpectacole.setPremiere(true);
 		newSpectacole.setData(new Date());
-		boolean result = dao.update(newSpectacole, Spectacole_ID);
+		boolean result = dao.update(newSpectacole);
 		Assert.assertTrue(result);
 	}
 	@Test

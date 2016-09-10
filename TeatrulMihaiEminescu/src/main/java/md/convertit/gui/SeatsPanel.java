@@ -92,6 +92,14 @@ public class SeatsPanel extends JPanel {
 		return libere;
 		
 	}
+	
+	public void setLocuriLibere(int libere){// 43
+		reset();
+		int locuriOcupate = locuri.size() - libere;
+		for (int i = 0; i < locuriOcupate; i++) {
+			locuri.get(i).setBackground(Color.RED);
+		}
+	}
 
 	public void reset() {
 		for (JButton jButton : locuri) {

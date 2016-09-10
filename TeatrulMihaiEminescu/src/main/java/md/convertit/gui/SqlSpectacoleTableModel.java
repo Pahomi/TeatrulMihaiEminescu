@@ -9,19 +9,19 @@ import javax.swing.table.AbstractTableModel;
 import md.convertit.dao.impl.SpectacoleDaoImpl;
 import md.convertit.spectacol.domain.Spectacole;
 
-public class SqlSpectacoleTableModel extends AbstractTableModel{
+public class SqlSpectacoleTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = -2627265411566825310L;
 
 	SpectacoleDaoImpl spectDao = new SpectacoleDaoImpl();
 	private List<Spectacole> spectacoleList = new ArrayList<>();
 	// store column names
-	private String[] columnNames = {"Id", "Name", "SeatsAvailable", "Premiere", "Data"};
+	private String[] columnNames = { "Id", "Name", "SeatsAvailable", "Premiere", "Data" };
 
 	public SqlSpectacoleTableModel() {
 		super();
 		spectacoleList = spectDao.findAll();
 	}
-	
+
 	@Override
 	public int getColumnCount() {
 		return columnNames.length;
@@ -34,30 +34,41 @@ public class SqlSpectacoleTableModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int row, int column) {
-	Spectacole spectacol = spectacoleList.get(row);
-	if(column == 0){
-		return spectacol.getId();
-	} else if(column == 1){
-		return spectacol.getName();
-	} else if(column == 2){
-		return spectacol.getSeatsAvailable();
-	} else if(column == 3){
-		return spectacol.isPremiere();
-	}  else if(column == 4){
-		return spectacol.getData();
-	} 
-	return "no data";
-}
+		Spectacole spectacol = spectacoleList.get(row);
+		if (column == 0) {
+			return spectacol.getId();
+		} else if (column == 1) {
+			return spectacol.getName();
+		} else if (column == 2) {
+			return spectacol.getSeatsAvailable();
+		} else if (column == 3) {
+			return spectacol.isPremiere();
+		} else if (column == 4) {
+			return spectacol.getData();
+		}
+		return "no data";
+	}
+
+	public Spectacole getSpectacol(int row) {
+		return spectacoleList.get(row);
+	}
+
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
-	public void addSpectacole(Spectacole spectacol){
-		spectDao.save(spectacol);
+
+	public void addSpectacole(Spectacole spectacol) {
+		if (spectacol.getId() != 0) {
+			spectDao.update(spectacol);
+		} else {
+			spectDao.save(spectacol);
+		}
 		spectacoleList = spectDao.findAll();
 		fireTableDataChanged();
-	}	
-	public void removeSpectacole(int row){
-		spectDao.delete((long) row);
+	}
+
+	public void removeSpectacole(int row) {
+		spectDao.delete(spectacoleList.get(row).getId());
 		spectacoleList = spectDao.findAll();
 		fireTableDataChanged();
 	}
@@ -90,7 +101,4 @@ public class SqlSpectacoleTableModel extends AbstractTableModel{
 		return serialVersionUID;
 	}
 
-	
-	
-	
 }

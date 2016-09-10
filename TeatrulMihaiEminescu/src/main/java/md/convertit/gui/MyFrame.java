@@ -14,12 +14,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.jar.Attributes.Name;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -53,6 +55,7 @@ public class MyFrame extends JFrame {
 	private SeatsPanel seatsPanel;
 	private JPanel rightPanel;
 	private JTable table;
+	private JLabel idLabel;
 
 	public MyFrame() throws HeadlessException {
 		super();
@@ -91,46 +94,7 @@ public class MyFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (validateFields()) {
-					String name = numeTextField.getText();
-
-					boolean premiere = premiereCheckBox.isSelected();
-
-					int seatsAvailable = seatsPanel.getLocuriLibere();
-
-					Spectacole spect = new Spectacole();
-					spect.setName(name);
-					spect.setSeatsAvailable(seatsAvailable);
-					spect.setPremiere(premiere);
-
-					DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-					String dateAsString = dateTextField.getText();
-					Date date = null;
-					try {
-						date = sourceFormat.parse(dateAsString);
-						spect.setData(date);
-
-						SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
-						model.addSpectacole(spect);
-						clearFields();
-					} catch (ParseException e1) {
-						dateTextField.setBorder(new EtchedBorder(Color.RED, Color.GRAY));
-					}
-				}
-
-			}
-
-			private boolean validateFields() {
-				boolean validated = true;
-				if (numeTextField.getText().trim().isEmpty()) {
-					numeTextField.setBorder(new EtchedBorder(Color.RED, Color.BLUE));
-					validated = false;
-				}
-				if (dateTextField.getText().trim().isEmpty()) {
-					dateTextField.setBorder(new EtchedBorder(Color.RED, Color.BLUE));
-					validated = false;
-				}
-				return validated;
+				save();
 			}
 		});
 
@@ -156,16 +120,15 @@ public class MyFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				Spectacole spect = new Spectacole();
-				spect.getName();
-				spect.getSeatsAvailable();
-				spect.isPremiere();
-
 				SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
-				//Spectacole spectacole = model.getData().getName().getSeatsAvailable().isPremiere()
-						//.get(table.getSelectedRow());
-
+				Spectacole spectacole = model.getSpectacol(table.getSelectedRow());
+				idLabel.setText(String.valueOf(spectacole.getId()));
+				numeTextField.setText(spectacole.getName());
+				
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+				dateTextField.setText(format.format(spectacole.getData()));
+				premiereCheckBox.setSelected(spectacole.isPremiere());
+				seatsPanel.setLocuriLibere(spectacole.getSeatsAvailable());
 			}
 
 		});
@@ -232,6 +195,51 @@ public class MyFrame extends JFrame {
 		});
 	}
 
+	private boolean validateFields() {
+		boolean validated = true;
+		if (numeTextField.getText().trim().isEmpty()) {
+			numeTextField.setBorder(new EtchedBorder(Color.RED, Color.BLUE));
+			validated = false;
+		}
+		if (dateTextField.getText().trim().isEmpty()) {
+			dateTextField.setBorder(new EtchedBorder(Color.RED, Color.BLUE));
+			validated = false;
+		}
+		return validated;
+	}
+	
+	protected void save() {
+		if (validateFields()) {
+			String name = numeTextField.getText();
+
+			boolean premiere = premiereCheckBox.isSelected();
+
+			int seatsAvailable = seatsPanel.getLocuriLibere();
+
+			Spectacole spect = new Spectacole();
+			spect.setId(Long.valueOf(idLabel.getText()));
+			spect.setName(name);
+			spect.setSeatsAvailable(seatsAvailable);
+			spect.setPremiere(premiere);
+
+			DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+			String dateAsString = dateTextField.getText();
+			Date date = null;
+			try {
+				date = sourceFormat.parse(dateAsString);
+				spect.setData(date);
+
+				SqlSpectacoleTableModel model = (SqlSpectacoleTableModel) table.getModel();
+				System.out.println(spect);
+				model.addSpectacole(spect);
+				clearFields();
+			} catch (ParseException e1) {
+				dateTextField.setBorder(new EtchedBorder(Color.RED, Color.GRAY));
+			}
+		}
+		
+	}
+
 	/**
 	 * clear all complited fields
 	 */
@@ -240,7 +248,7 @@ public class MyFrame extends JFrame {
 		dateTextField.setText("");
 		premiereCheckBox.setSelected(false);
 		seatsPanel.reset();
-
+		idLabel.setText("0");
 	}
 
 	private void iniContainers() {
@@ -359,6 +367,10 @@ public class MyFrame extends JFrame {
 		panel3.add(premiereCheckBox);
 
 		panel.setBorder(new TitledBorder(new EtchedBorder(), "Adauga spectacol"));
+		
+		idLabel = new JLabel("");
+		idLabel.setVisible(false);
+		panel.add(idLabel);
 		panel.add(panel1);
 		panel.add(panel2);
 		panel.add(panel3);

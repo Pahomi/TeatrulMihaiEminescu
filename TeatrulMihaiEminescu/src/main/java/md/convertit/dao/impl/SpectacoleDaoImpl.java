@@ -79,7 +79,7 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 	}
 
 	@Override
-	public boolean update(Spectacole newSpectacole, Long id) {
+	public boolean update(Spectacole newSpectacole) {
 		try {
 			conn = ConnectionUtil.getConnection();
 			String sql = "UPDATE `spectacole` SET `name`=?, `seatsAvailable`=?, `premiere`=?, `data`=? WHERE `id`=?";
@@ -88,7 +88,7 @@ public class SpectacoleDaoImpl implements SpectacoleDao {
 			ps.setInt(2, newSpectacole.getSeatsAvailable());
 			ps.setBoolean(3, newSpectacole.isPremiere());
 			ps.setDate(4, new Date(newSpectacole.getData().getTime()));
-			ps.setLong(5, id);
+			ps.setLong(5, newSpectacole.getId());
 			int affectedRows = ps.executeUpdate();
 			log.info(String.format("Update object, total affected rows: %d", affectedRows));
 			return true;

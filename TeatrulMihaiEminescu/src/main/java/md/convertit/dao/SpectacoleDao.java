@@ -10,7 +10,7 @@ public interface SpectacoleDao {
 	boolean save(Spectacole spectacole);
 
 	List<Spectacole> findAll();
-	boolean update(Spectacole newSpectacole, Long id);
+	boolean update(Spectacole newSpectacole);
 	
 	boolean delete(Long id);
 }
