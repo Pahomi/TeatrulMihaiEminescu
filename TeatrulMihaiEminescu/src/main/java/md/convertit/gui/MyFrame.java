@@ -217,7 +217,9 @@ public class MyFrame extends JFrame {
 			int seatsAvailable = seatsPanel.getLocuriLibere();
 
 			Spectacole spect = new Spectacole();
-			spect.setId(Long.valueOf(idLabel.getText()));
+			if(!idLabel.getText().isEmpty()){
+				spect.setId(Long.valueOf(idLabel.getText()));
+			}
 			spect.setName(name);
 			spect.setSeatsAvailable(seatsAvailable);
 			spect.setPremiere(premiere);
