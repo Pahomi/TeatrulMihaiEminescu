@@ -31,7 +31,15 @@ public class SqlSpectacoleTableModel extends AbstractTableModel {
 	public int getRowCount() {
 		return spectacoleList.size();
 	}
-
+    
+	   
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public Object getValueAt(int row, int column) {
 		Spectacole spectacol = spectacoleList.get(row);
